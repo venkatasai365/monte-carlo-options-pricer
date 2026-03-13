@@ -1,104 +1,92 @@
-# 📈 Monte Carlo Options Pricer & Stress Tester
+# Monte Carlo Options Pricer & Stress Tester
 
-A quantitative finance project implementing **Monte Carlo simulation** with
-**Geometric Brownian Motion (GBM)** to price European, Asian, and Barrier options,
-with full VaR, CVaR, and stress testing.
+A Python implementation of **Monte Carlo simulation** for pricing European, Asian,
+and Barrier options with full risk analytics including VaR, CVaR, and stress testing.
 
 ---
 
-## 📊 Results
+## Concept
 
-### Option Prices (50,000 Simulations)
-| Option Type | MC Price |
-|-------------|----------|
-| European Call | $7.99 |
-| European Put | $7.93 |
-| Asian Call | $3.50 |
-| Barrier Down-Out | $7.74 |
-| Barrier Down-In | $0.25 |
+The Monte Carlo method simulates thousands of possible price paths for an underlying
+asset using **Geometric Brownian Motion (GBM)**:
+
+```
+dS = mu * S * dt  +  sigma * S * dWt
+```
+
+Where:
+- `S`     = asset price
+- `mu`    = drift (risk-free rate)
+- `sigma` = volatility
+- `Wt`    = Wiener process (random Brownian motion)
+
+The option price is estimated as the discounted expected payoff:
+
+```
+C = exp(-r * T) * average[ max(ST - K, 0) ]
+```
+
+For exotic options:
+- **Asian option** — payoff uses average price over entire path (cheaper)
+- **Barrier option** — cancelled or activated if price crosses barrier level B
+
+---
+
+## Results (50,000 Simulations)
+
+### Option Prices
+| Option Type       | MC Price |
+|-------------------|----------|
+| European Call     | $7.99    |
+| European Put      | $7.93    |
+| Asian Call        | $3.50    |
+| Barrier Down-Out  | $7.74    |
+| Barrier Down-In   | $0.25    |
 
 ### Risk Metrics
-| Metric | Value |
-|--------|-------|
-| 95% VaR | -26.08% |
-| 95% CVaR | -31.68% |
-| 99% VaR | -35.28% |
-| 99% CVaR | -39.21% |
+| Metric      | Value   |
+|-------------|---------|
+| 95% VaR     | -26.08% |
+| 95% CVaR    | -31.68% |
+| 99% VaR     | -35.28% |
+| 99% CVaR    | -39.21% |
 
-### Stress Test (Market Shocks)
-| Scenario | Option Price | P&L Change |
-|----------|-------------|------------|
-| -10% shock | $3.59 | -55.08% |
-| -20% shock | $1.18 | -85.22% |
-| -30% shock | $0.25 | -96.87% |
-| -40% shock | $0.03 | -99.64% |
-
----
-
-## 📉 Charts
-# 📈 Monte Carlo Options Pricer & Stress Tester
-
-A quantitative finance project implementing **Monte Carlo simulation** with
-**Geometric Brownian Motion (GBM)** to price European, Asian, and Barrier options,
-with full VaR, CVaR, and stress testing.
+### Stress Test
+| Scenario   | Option Price | P&L Change |
+|------------|-------------|------------|
+| -10% shock | $3.59       | -55.08%    |
+| -20% shock | $1.18       | -85.22%    |
+| -30% shock | $0.25       | -96.87%    |
+| -40% shock | $0.03       | -99.64%    |
 
 ---
 
-## 📊 Results
-
-### Option Prices (50,000 Simulations)
-| Option Type | MC Price |
-|-------------|----------|
-| European Call | $7.99 |
-| European Put | $7.93 |
-| Asian Call | $3.50 |
-| Barrier Down-Out | $7.74 |
-| Barrier Down-In | $0.25 |
-
-### Risk Metrics
-| Metric | Value |
-|--------|-------|
-| 95% VaR | -26.08% |
-| 95% CVaR | -31.68% |
-| 99% VaR | -35.28% |
-| 99% CVaR | -39.21% |
-
-### Stress Test (Market Shocks)
-| Scenario | Option Price | P&L Change |
-|----------|-------------|------------|
-| -10% shock | $3.59 | -55.08% |
-| -20% shock | $1.18 | -85.22% |
-| -30% shock | $0.25 | -96.87% |
-| -40% shock | $0.03 | -99.64% |
-
----
-
-## 📉 Charts
+## Output Charts
 
 ### GBM Simulated Price Paths
-![GBM Paths](outputs/gbm_paths.png)
+![Price Paths](results/gbm_paths.png)
 
-### VaR & CVaR Return Distribution
-![VaR CVaR](outputs/var_cvar.png)
+### VaR and CVaR Return Distribution
+![VaR CVaR](results/var_cvar.png)
 
 ### Stress Test Results
-![Stress Test](outputs/stress_test.png)
+![Stress Test](results/stress_test.png)
 
 ---
 
-## 🧠 Concepts Covered
+## Features
 
-- **Geometric Brownian Motion (GBM)** — stochastic price path simulation
-- **European Options** — standard call/put pricing via Monte Carlo
-- **Asian Options** — path-dependent pricing using average price
-- **Barrier Options** — knock-out/knock-in exotic option pricing
-- **Value at Risk (VaR)** — 95% and 99% confidence levels
-- **Conditional VaR (CVaR)** — Expected Shortfall (Basel III standard)
-- **Stress Testing** — P&L impact under -10% to -40% market crashes
+- 50,000 GBM Monte Carlo price path simulations
+- European Call and Put option pricing
+- Asian option pricing (path-dependent, average price)
+- Barrier option pricing (Down-and-Out and Down-and-In)
+- Value at Risk (VaR) at 95% and 99% confidence levels
+- Conditional VaR / Expected Shortfall (CVaR) — Basel III standard
+- Stress testing under -10% to -40% market crash scenarios
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![NumPy](https://img.shields.io/badge/NumPy-1.26-orange)
@@ -107,55 +95,55 @@ with full VaR, CVaR, and stress testing.
 
 ---
 
-## 🚀 How to Run
+## Project Structure
+
+```
+monte-carlo-options-pricer/
+│
+├── main.py              <- Run full simulation
+├── src/
+│   ├── gbm_simulator.py <- GBM price path engine
+│   ├── option_pricer.py <- European, Asian, Barrier pricing
+│   └── risk_metrics.py  <- VaR, CVaR, Stress Testing
+├── results/             <- Output charts (auto-generated)
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+## How to Run
 
 ```bash
-git clone https://github.com/venkatasai365/monte-carlo-options-pricer.git
+git clone https://github.com/venkatasai365/monte-carlo-options-pricer
 cd monte-carlo-options-pricer
-python -m venv venv
-venv\Scripts\activate        # Windows
 pip install -r requirements.txt
-python run_all.py
+python main.py
+```
 
-
-### GBM Simulated Price Paths
-![GBM Paths](outputs/gbm_paths.png)
-
-### VaR & CVaR Return Distribution
-![VaR CVaR](outputs/var_cvar.png)
-
-### Stress Test Results
-![Stress Test](outputs/stress_test.png)
+Charts save automatically to `results/` folder.
 
 ---
 
-## 🧠 Concepts Covered
+## Key Parameters
 
-- **Geometric Brownian Motion (GBM)** — stochastic price path simulation
-- **European Options** — standard call/put pricing via Monte Carlo
-- **Asian Options** — path-dependent pricing using average price
-- **Barrier Options** — knock-out/knock-in exotic option pricing
-- **Value at Risk (VaR)** — 95% and 99% confidence levels
-- **Conditional VaR (CVaR)** — Expected Shortfall (Basel III standard)
-- **Stress Testing** — P&L impact under -10% to -40% market crashes
-
----
-
-## 🛠️ Tech Stack
-
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![NumPy](https://img.shields.io/badge/NumPy-1.26-orange)
-![Pandas](https://img.shields.io/badge/Pandas-2.0-green)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-3.8-red)
+| Parameter | Value    | Description          |
+|-----------|----------|----------------------|
+| S0        | $100     | Initial stock price  |
+| K         | $105     | Strike price         |
+| B         | $85      | Barrier level        |
+| r         | 5%       | Risk-free rate       |
+| sigma     | 20%      | Volatility           |
+| T         | 1 year   | Time to expiry       |
+| n_sim     | 50,000   | Number of simulations|
 
 ---
 
-## 🚀 How to Run
+## Author
 
-```bash
-git clone https://github.com/venkatasai365/monte-carlo-options-pricer.git
-cd monte-carlo-options-pricer
-python -m venv venv
-venv\Scripts\activate        # Windows
-pip install -r requirements.txt
-python run_all.py
+**Venkatasai Thaduri**
+NISM Equity Derivatives Certified (2026) | Junior Quantitative Analyst
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-venkatasai--thaduri-blue)](https://linkedin.com/in/venkatasai-thaduri)
+[![GitHub](https://img.shields.io/badge/GitHub-venkatasai365-black)](https://github.com/venkatasai365)

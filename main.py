@@ -2,14 +2,15 @@
 # SECTION 1: IMPORTS & PARAMETERS
 # What: Load libraries and define our financial parameters
 # ============================================================
-import numpy as np
-import pandas as pd
+import sys, os, numpy as np, pandas as pd
 import matplotlib
-matplotlib.use('Agg')          # saves charts to file instead of popup
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+os.makedirs('results', exist_ok=True)
 
-os.makedirs(r'C:\mcop\outputs', exist_ok=True)   # create outputs folder
+
+  # create outputs folder
 
 # --- Financial Parameters (you can change these!) ---
 S0    = 100     # Current stock price = $100
@@ -59,7 +60,7 @@ plt.title('Monte Carlo GBM — 50 Simulated Stock Price Paths over 1 Year', font
 plt.xlabel('Trading Days (0 = Today, 252 = 1 Year Later)')
 plt.ylabel('Stock Price ($)')
 plt.legend(); plt.tight_layout()
-plt.savefig(r'C:\mcop\outputs\gbm_paths.png', dpi=150)
+plt.savefig(r'results/gbm_paths.png', dpi=150)
 plt.close()
 print("   Chart saved: gbm_paths.png")
 
@@ -136,7 +137,7 @@ plt.axvline(cvar99, color='darkred',linestyle=':',  lw=2, label=f'CVaR 99%: {cva
 plt.title('Return Distribution — VaR & CVaR (50,000 Simulations)', fontsize=13, fontweight='bold')
 plt.xlabel('1-Year Portfolio Return'); plt.ylabel('Number of Simulations')
 plt.legend(); plt.tight_layout()
-plt.savefig(r'C:\mcop\outputs\var_cvar.png', dpi=150)
+plt.savefig(r'results/var_cvar.png', dpi=150)
 plt.close()
 print("   Chart saved: var_cvar.png")
 
@@ -185,7 +186,7 @@ for i,v in enumerate(stress_df['Option Price']):
 
 fig.suptitle('Monte Carlo Stress Test — Market Crash Scenarios', fontsize=14, fontweight='bold')
 fig.tight_layout()
-plt.savefig(r'C:\mcop\outputs\stress_test.png', dpi=150)
+plt.savefig(r'results/stress_test.png', dpi=150)
 plt.close()
 print("   Chart saved: stress_test.png")
 
